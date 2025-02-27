@@ -1,8 +1,8 @@
 import dbConnect from "@/database/connection";
 import User from "@/models/user.schema";
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google"
-const handler=NextAuth({
+export const authOptions:AuthOptions={
     providers:[
         GoogleProvider({
             clientId:process.env.GOOGLE_CLIENT_ID as string,
@@ -21,7 +21,6 @@ const handler=NextAuth({
                         email:user.email,
                         profileImage:user.image||"http://www.hello.com/image.png"
                     })
-                  
                 }
                 return true;
             }
@@ -32,5 +31,6 @@ const handler=NextAuth({
             }
         }
     }
-})
+}
+const handler=NextAuth(authOptions);
 export {handler as GET,handler as POST}
