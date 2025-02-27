@@ -29,5 +29,5 @@ const paymentSchema=new Schema<IPayment>({
         default:Status.Pending
     }
 })
-const Payment=mongoose.model("Payment");
+const Payment=mongoose.model("Payment",paymentSchema);
 export default Payment;
