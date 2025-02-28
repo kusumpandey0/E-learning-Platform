@@ -1,6 +1,6 @@
 import dbConnect from "@/database/connection";
 import User from "@/models/user.schema";
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { AuthOptions, Session } from "next-auth";
 import GoogleProvider from "next-auth/providers/google"
 export const authOptions:AuthOptions={
     providers:[
@@ -29,6 +29,11 @@ export const authOptions:AuthOptions={
             return false;
             
             }
+        },
+        async session({session,user}:{session:Session,user:any}) {
+          const data=await User.findById(user.id);
+          session.user.role=data.role||"student";
+          return session;
         }
     }
 }
