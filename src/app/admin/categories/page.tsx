@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 import { ICategory } from "@/models/category.schema";
-import Modal from "../components/Modal";
+import Modal from "../components/Modal/Modal";
 
 async function fetchCategories() {
   try {
