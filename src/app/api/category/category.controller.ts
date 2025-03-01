@@ -37,8 +37,8 @@ export async function getCategories(){
     try
     {
         await dbConnect();
-    const categories=await Category.find();
-    if(categories.length===0)
+    const data=await Category.find();
+    if(data.length===0)
     {
         return NextResponse.json({
             message:"No categories found"
@@ -47,7 +47,7 @@ export async function getCategories(){
     }
     return NextResponse.json({
         message:"Category fetched successfully",
-        categories
+        data
     },
     {status:200})
     }
