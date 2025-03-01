@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 import { ICategory } from "@/models/category.schema";
+import Modal from "../components/Modal";
 
 async function fetchCategories() {
   try {
@@ -15,7 +16,6 @@ async function fetchCategories() {
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
- 
  const [isModalOpen,setIsModalOpen]=useState(false);
  const openModal=()=>setIsModalOpen(true);
  const closeModal=()=>setIsModalOpen(false);
@@ -30,6 +30,7 @@ export default function Categories() {
     return  <>
    <div className="flex flex-col">
   <div className=" overflow-x-auto">
+    {isModalOpen && <Modal closeModal={closeModal}/>}
     <div className="min-w-full inline-block align-middle">
       <div className="relative  flex  justify-between text-gray-500 focus-within:text-gray-900 mb-4">
         <div className="absolute inset-y-0 left-1 flex items-center pl-3 pointer-events-none ">
