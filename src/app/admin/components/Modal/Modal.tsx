@@ -1,41 +1,29 @@
 "use client"
-import { useState } from "react";
-import { addAbortSignal } from "stream";
+;
+import { createCategory,resetStatus } from "@/store/category/categorySlice";
+import { Status } from "@/store/category/types";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useEffect, useState } from "react";
 export default function Modal({closeModal}:{closeModal:()=>void})
 {
   const [name,setName]=useState<string>("");
   const [description,setDescription]=useState<string>("");
   const [loading,setLoading]=useState(false);
-
+const dispatch=useAppDispatch();
+const {status}=useAppSelector((store)=>store.categories);
   const handleSubmit = async (e: React.FormEvent) => {  
+    e.preventDefault(); 
     setLoading(true);
-    e.preventDefault();  
-try{const response=await fetch("http://localhost:3000/api/category",
-{method:"POST",
-headers:{
-  "Content-Type":"application/json"
-},
-  body:JSON.stringify({name,description})
-})
-if(response.ok)
-{
-  alert("Category added successfully.")
-  closeModal();
+    dispatch(createCategory({name,description}))
+    
 }
-else
-{
-  alert("Something went wrong.")
-}}
-catch(error)
-{
-  console.log(error);
-  
-}
-finally{
-  setLoading(false);
-}
-}
-
+useEffect(()=>{
+  if(status===Status.Success){
+    setLoading(false);
+    closeModal();
+    dispatch(resetStatus());
+  }
+},[status]);
   return (
  <div id="modal" className="fixed inset-0 z-50 flex items-center justify-center">
     <div className="fixed inset-0 bg-black/50"/>
