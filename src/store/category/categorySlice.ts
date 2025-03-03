@@ -1,7 +1,8 @@
 
 import { createSlice } from "@reduxjs/toolkit";
+import { AppDispatch } from "../store";
 import { ICategoryInitialState, Status } from "./types";
-
+import axios from "axios";
 
 
 const datas:ICategoryInitialState={
@@ -22,3 +23,22 @@ const categorySlice=createSlice({//returns object {action:"jsjjs"}
 });
 const {setCategories,setStatus}=categorySlice.actions;
 export default categorySlice.reducer
+
+export function fetchCategories(){
+    return async function fetchCategoriesThunk(dispatch:AppDispatch){
+        try{
+            const response=await axios.get("http://localhost:3000/api/category")
+            if(response.status===200){
+                dispatch(setStatus(Status.Success));
+                dispatch(setCategories(response.data.data))
+            }
+            else{
+                dispatch(setStatus(Status.Error));
+            }
+        }
+        catch(error){
+            console.log(error);
+            dispatch(setStatus(Status.Error));
+        }
+    }
+}

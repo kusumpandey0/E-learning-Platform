@@ -2,30 +2,20 @@
 import { useEffect, useState } from "react";
 import { ICategory } from "@/models/category.schema";
 import Modal from "../components/Modal/Modal";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { fetchCategories } from "@/store/category/categorySlice";
 
-async function fetchCategories() {
-  try {
-    const response = await fetch("http://localhost:3000/api/category");
-    if (!response.ok) throw new Error("Failed to fetch categories");
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    return { data: [] }; // Return empty array if fetch fails
-  }
-}
+
 
 export default function Categories() {
-  const [categories, setCategories] = useState([]);
  const [isModalOpen,setIsModalOpen]=useState(false);
  const openModal=()=>setIsModalOpen(true);
  const closeModal=()=>setIsModalOpen(false);
+ const dispatch=useAppDispatch();
+ const {categories}=useAppSelector((store)=>store.categories)
  console.log(isModalOpen);
   useEffect(() => {
-   const getCategories=async()=>{
-     const {data}=await fetchCategories();
-     setCategories(data);
-   }
-   getCategories();
+   dispatch(fetchCategories());
   }, []);
     return  <>
    <div className="flex flex-col">
