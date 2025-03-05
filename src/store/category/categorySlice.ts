@@ -21,12 +21,15 @@ const categorySlice=createSlice({//returns object {action:"jsjjs"}
         setCategories(state,action){
             state.categories=action.payload;
         },
+        addCategories(state,action){
+            state.categories.push(action.payload)
+        },
         resetStatus(state){
  state.status=Status.Loading;
         }
     }
 });
-export const {setCategories,setStatus,resetStatus}=categorySlice.actions;
+export const {setCategories,setStatus,addCategories, resetStatus}=categorySlice.actions;
 export default categorySlice.reducer
 
 export function fetchCategories(){
@@ -52,6 +55,7 @@ export function createCategory(data:{name:string,description:string}){
             const response=await API.post("/category",data);
             if(response.status===201){
                 dispatch(setStatus(Status.Success));
+                dispatch(addCategories(response.data.data));
             }
             else{  
                 dispatch(setStatus(Status.Error))

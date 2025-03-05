@@ -15,11 +15,12 @@ export async function createCategory(req:Request){
         },
         {status:400})
     }
-    await Category.create({
+    const category=await Category.create({
         name,
         description,
     })
-    return NextResponse.json({message:"Category created Successfully"},
+    return NextResponse.json({message:"Category created Successfully",
+    data:category},
     {
         status:201
     })
