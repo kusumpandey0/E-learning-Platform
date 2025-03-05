@@ -1,7 +1,6 @@
 import dbConnect from "@/database/connection";
 import Category from "@/models/category.schema";
 import { NextRequest, NextResponse } from "next/server";
-import authMiddleware from "../../../../middleware/auth.middleware";
 
 export async function createCategory(req:Request){
    try{

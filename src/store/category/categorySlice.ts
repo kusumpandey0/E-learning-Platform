@@ -10,6 +10,7 @@ const datas:ICategoryInitialState={
 categories:[],
 status:Status.Loading
 }
+
 const categorySlice=createSlice({//returns object {action:"jsjjs"}
     name:"category",
     initialState:datas,
@@ -52,7 +53,7 @@ export function createCategory(data:{name:string,description:string}){
             if(response.status===201){
                 dispatch(setStatus(Status.Success));
             }
-            else{
+            else{  
                 dispatch(setStatus(Status.Error))
             }
         }
@@ -62,7 +63,6 @@ export function createCategory(data:{name:string,description:string}){
         }
     }
 }
-
 export function deleteCategory(id:string){
     return async function deleteCategoryThunk(dispatch:AppDispatch){
         try {
