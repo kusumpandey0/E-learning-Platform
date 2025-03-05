@@ -54,3 +54,19 @@ export async function getCategories(){
         return NextResponse.json({message:"Something went wrong"},{status:500})
     }
 }
+
+export async function deleteCategory(id:string){
+    try{
+        await dbConnect();
+        const deleted=await Category.findByIdAndDelete(id);
+        if(!deleted){
+            return NextResponse.json({
+                message:"Something went wrong"},{status:400})}
+                return NextResponse.json({message:"category deleted successfully"},{status:200})
+            }
+        
+    catch(error){
+      console.log(error);
+      return NextResponse.json({message:"something went wrong"},{status:500})
+    }
+}
