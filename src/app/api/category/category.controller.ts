@@ -61,7 +61,8 @@ export async function deleteCategory(id:string){
         const deleted=await Category.findByIdAndDelete(id);
         if(!deleted){
             return NextResponse.json({
-                message:"Something went wrong"},{status:400})}
+                message:"Something went wrong"},{status:400})
+            }
                 return NextResponse.json({message:"category deleted successfully"},{status:200})
             }
         

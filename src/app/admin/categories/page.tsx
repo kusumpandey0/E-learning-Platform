@@ -17,8 +17,7 @@ export default function Categories() {
  const deleteCat=(id:string)=>{
    if(id){
      dispatch(deleteCategory(id));
-   }
-
+   } 
  }
  console.log(isModalOpen);
   useEffect(() => {

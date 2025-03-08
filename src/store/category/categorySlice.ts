@@ -26,10 +26,16 @@ const categorySlice=createSlice({//returns object {action:"jsjjs"}
         },
         resetStatus(state){
  state.status=Status.Loading;
+        },
+        deleteCategoryByIndex(state,action){
+            const index=state.categories.findIndex((category)=>category._id==action.payload);
+            if(index!==-1){
+             state.categories.splice(index,1);
+            }
         }
     }
 });
-export const {setCategories,setStatus,addCategories, resetStatus}=categorySlice.actions;
+export const {setCategories,setStatus,addCategories, resetStatus,deleteCategoryByIndex}=categorySlice.actions;
 export default categorySlice.reducer
 
 export function fetchCategories(){
@@ -73,6 +79,7 @@ export function deleteCategory(id:string){
             const response = await API.delete("/category/" + id)
             if(response.status === 200){
                 dispatch(setStatus(Status.Success))
+                dispatch(deleteCategoryByIndex(id));
             }else{
                 dispatch(setStatus(Status.Error))
             }
