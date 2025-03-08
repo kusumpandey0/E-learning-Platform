@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ICategory } from "@/models/category.schema";
 import Modal from "../components/Modal/Modal";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { deleteCategory, fetchCategories } from "@/store/category/categorySlice";
+import categorySlice, { deleteCategory, fetchCategories } from "@/store/category/categorySlice";
 
 
 
@@ -20,10 +20,11 @@ export default function Categories() {
      dispatch(deleteCategory(id));
    } 
  }
- console.log(isModalOpen);
   useEffect(() => {
    dispatch(fetchCategories());
   }, []);
+ 
+  const filteredCategories=categories.filter((category)=>category.name.toLowerCase().includes(searchTerm.toLowerCase())||category.description?.toLowerCase().includes(searchTerm.toLowerCase()));
     return  <>
    <div className="flex flex-col">
   <div className=" overflow-x-auto">
@@ -54,7 +55,7 @@ export default function Categories() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-300 ">
-               {categories?.length>0 && categories.map((category:ICategory)=>{
+               {filteredCategories?.length>0 && filteredCategories.map((category:ICategory)=>{
                  return (
                   <tr key={category._id} className="bg-white transition-all duration-500 hover:bg-gray-50">
                   <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 "> {category._id}</td>
