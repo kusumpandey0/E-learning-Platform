@@ -1,17 +1,16 @@
 import dbConnect from "@/database/connection"
-import Course from "@/models/course.schema";
 import Lesson from "@/models/lesson.schema";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function createCourse(req:NextRequest){
+export async function createLesson(req:NextRequest){
     try{
         await dbConnect();
-        const {title,description,price,duration,category,}=await req.json();
-       const data=await Course.create({
-           title,description,price,duration,category
+        const {title,description,videoUrl,course}=await req.json();
+       const data=await Lesson.create({
+           title,description,videoUrl,course
        })
        return NextResponse.json({
-           message:"course created!",
+           message:"lesson created!",
            data
        },{status:201})
     }
@@ -22,18 +21,18 @@ export async function createCourse(req:NextRequest){
    },{status:500})
     }
 }
-export async function fetchCourses(){
+export async function fetchLessons(){
     try{
         await dbConnect();
-        const data = await Course.find().populate("category");
+        const data = await Lesson.find().populate("course");
         if(data.length===0)
         {
             return NextResponse.json({
-                message:"no course found"
+                message:"no lesson found"
             },{status:404});
         }
         return NextResponse.json({
-            message:"courses fetched",
+            message:"lessons fetched",
             data
         },{status:200})
     }
@@ -44,18 +43,18 @@ export async function fetchCourses(){
         },{status:500})
     }
 }
-export async function fetchCourse(id:string){
+export async function fetchLesson(id:string){
     try{
         await dbConnect();
-        const data = await Course.findById(id);
+        const data = await Lesson.findById(id);
         if(!data)
         {
             return NextResponse.json({
-                message:"no course with that id found"
+                message:"no lesson with that id found"
             },{status:404});
         }
         return NextResponse.json({
-            message:"course fetched",
+            message:"lesson fetched",
             data
         },{status:200})
     }
@@ -66,14 +65,12 @@ export async function fetchCourse(id:string){
         },{status:500})
     }
 }
-export async function deleteCourse(id:string){
+export async function deleteLesson(id:string){
     try{
         await dbConnect();
-      await Course.findByIdAndDelete(id);
-        //delete lessons too
-        await Lesson.deleteMany({course:id});
+        await Lesson.findByIdAndDelete(id);
         return NextResponse.json({
-            message:"course deleted"
+            message:"lesson deleted"
         },{status:200})
     }
     catch(error){

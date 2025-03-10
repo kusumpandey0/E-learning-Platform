@@ -3,7 +3,15 @@ interface IEnrollment extends Document{
     student:mongoose.Types.ObjectId,
     course:mongoose.Types.ObjectId,
     enrollment:Date,
+    enrollmentStatus:EnrollmentStatus,
+whatsapp:string,
 }
+enum EnrollmentStatus{
+Approve="approve",
+Reject="reject",
+Pending="pending"
+    }
+
 const enrollmentSchema=new Schema<IEnrollment>({
     student:{
         type:Schema.Types.ObjectId,
@@ -16,7 +24,12 @@ const enrollmentSchema=new Schema<IEnrollment>({
     enrollment:{
         type:Date,
         default:Date.now()
-    }
+    },
+    enrollmentStatus:{
+        type:String,
+        enum:[EnrollmentStatus.Approve, EnrollmentStatus.Reject, EnrollmentStatus.Pending],
+    },
+    whatsapp:String,
 })
-const Enrollment=mongoose.model("Enrollment",enrollmentSchema);
+const Enrollment=mongoose.models.Enrollment||mongoose.model("Enrollment",enrollmentSchema);
 export default Enrollment;
