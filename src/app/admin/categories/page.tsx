@@ -6,8 +6,6 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import categorySlice, { deleteCategory, fetchCategories } from "@/store/category/categorySlice";
 
 
-
-
 export default function Categories() {
   const [searchTerm,setSearchTerm]=useState<string>("")
  const [isModalOpen,setIsModalOpen]=useState(false);

@@ -2,7 +2,7 @@ import dbConnect from "@/database/connection";
 import Category from "@/models/category.schema";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function createCategory(req:Request){
+export async function createCategory(req:NextRequest){
    try{
      await dbConnect();
     const {name,description}=await req.json();

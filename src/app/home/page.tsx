@@ -1,25 +1,37 @@
-"use client"
-import {signIn, useSession,signOut} from "next-auth/react"
-import Image from 'next/image';
- function Home(){
-     const {data:session}=useSession();
-if(session){
+"use client";
+import { signIn, useSession, signOut } from "next-auth/react";
+import Image from "next/image";
+
+function Home() {
+    const { data: session, status } = useSession();
+
+    if (status === "loading") {
+        return <h1>Loading...</h1>; // Prevents UI flickering
+    }
+
+    if (session) {
+        return (
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+                <Image 
+                    src={session.user?.image || "/profile.png"} 
+                    alt="User Image" 
+                    width={80} 
+                    height={80} 
+                    style={{ borderRadius: "50%" }} 
+                />
+                <h1>Welcome, {session.user?.name}</h1>
+                <p>{session.user?.email}</p>
+                <button onClick={() => signOut()}>Sign Out</button>
+            </div>
+        );
+    }
+
     return (
-       <>
-       <Image src={session.user?.image||"profile.png"} alt="User Image" width={80} height={80}/>
-        <h1>Welcome,{session.user?.name}</h1>
-        <h1>{session.user?.email}</h1>
-        <button onClick={()=>signOut()}>Sign Out</button>
-       </>
-    )
-}
-    return (
-        <>
-        <div>
-            <h1>not logged in</h1>
-            <button onClick={()=>signIn("google")}>Sign in with google</button>
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <h1>Not Logged In</h1>
+            <button onClick={() => signIn("google")}>Sign in with Google</button>
         </div>
-        </>
-    )
+    );
 }
+
 export default Home;

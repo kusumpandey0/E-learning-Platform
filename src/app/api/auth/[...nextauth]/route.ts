@@ -14,9 +14,9 @@ export const authOptions:AuthOptions={
         async signIn({user}):Promise<boolean>{
             try{ 
                 await dbConnect();
-                const existingUser=await User.findOne({email:user.email});
+               let existingUser=await User.findOne({email:user.email});
                 if(!existingUser){
-                    User.create({
+                    existingUser=await User.create({
                         username:user.name,
                         email:user.email,
                         profileImage:user.image||"http://www.hello.com/image.png"
@@ -31,9 +31,20 @@ export const authOptions:AuthOptions={
             }
         },
         async session({session,user}:{session:Session,user:any}) {
-          const data=await User.findById(user.id);
-          session.user.role=data.role||"student";
-          return session;
+            try {
+                await dbConnect();
+                
+                const data = await User.findOne({ email: session.user.email });
+
+                if (data) {
+                    session.user.role = data.role || "student";
+                }
+
+                return session;
+            } catch (error) {
+                console.log("Error in session callback:", error);
+                return session;
+            }
         }
     }
 }

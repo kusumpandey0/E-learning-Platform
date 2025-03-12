@@ -13,7 +13,7 @@ function Dashboard({children}:Readonly<{children:React.ReactNode}>){
     </div>
     {/* Main content */}
     <div className="flex flex-col flex-1 overflow-y-auto">
-      <div className="flex items-center justify-between h-16 bg-white border-b border-gray-200">
+      {/* <div className="flex items-center justify-between h-16 bg-white border-b border-gray-200">
         <div className="flex items-center px-4">
           <button className="text-gray-500 focus:outline-none focus:text-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -29,7 +29,7 @@ function Dashboard({children}:Readonly<{children:React.ReactNode}>){
             </svg>
           </button>
         </div>
-      </div>
+      </div> */}
       <div className="p-4">
        {children}
       </div>

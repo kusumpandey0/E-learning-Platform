@@ -1,12 +1,26 @@
+"use client";
 import Dashboard from "@/components/dashboard/Dashboard";
-import React from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
+function AdminLayout({ children }: { children: React.ReactNode }) {
+    const { data: session, status } = useSession();
+    const router = useRouter();
 
-function AdminLayout({children}:Readonly<{children:React.ReactNode}>){
-    return(
-        <Dashboard>
-           {children}
-            </Dashboard>
-    )
+    useEffect(() => {
+        if (status === "loading") return;
+
+        if (!session?.user || session.user.role !== "admin") {
+            router.replace("/");
+        }
+    }, [session?.user?.role, status, router]);
+
+    if (status === "loading") {
+        return <p>Loading...</p>; // Or replace with a spinner component
+    }
+
+    return <Dashboard>{children}</Dashboard>;
 }
+
 export default AdminLayout;
