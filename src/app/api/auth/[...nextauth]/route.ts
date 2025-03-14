@@ -1,7 +1,9 @@
 import dbConnect from "@/database/connection";
 import User from "@/models/user.schema";
 import NextAuth, { AuthOptions, Session } from "next-auth";
-import GoogleProvider from "next-auth/providers/google"
+import {JWT } from "next-auth/jwt";
+import GoogleProvider from "next-auth/providers/google";
+
 export const authOptions:AuthOptions={
     providers:[
         GoogleProvider({
@@ -14,9 +16,9 @@ export const authOptions:AuthOptions={
         async signIn({user}):Promise<boolean>{
             try{ 
                 await dbConnect();
-               let existingUser=await User.findOne({email:user.email});
+                const existingUser=await User.findOne({email:user.email});
                 if(!existingUser){
-                    existingUser=await User.create({
+                    await User.create({
                         username:user.name,
                         email:user.email,
                         profileImage:user.image||"http://www.hello.com/image.png"
@@ -30,21 +32,26 @@ export const authOptions:AuthOptions={
             
             }
         },
-        async session({session,user}:{session:Session,user:any}) {
-            try {
-                await dbConnect();
-                
-                const data = await User.findOne({ email: session.user.email });
-
-                if (data) {
-                    session.user.role = data.role || "student";
-                }
-
-                return session;
-            } catch (error) {
-                console.log("Error in session callback:", error);
-                return session;
+        async jwt({token}:{token:JWT}){
+            console.log("TOKEN",token);
+            await dbConnect();
+            const user=await User.findOne({email:token.email});
+            if(user){
+                token.id=user._id
+                token.role=user.role
             }
+            return token;
+        },
+        
+        async session({session,token}:{session:Session,token:JWT}) {
+    
+           
+         if(token){
+           (session.user as any).id=token.id;
+            (session.user as any).role=token.role;
+         }
+         console.log("SESSION",session);
+          return session; 
         }
     }
 }

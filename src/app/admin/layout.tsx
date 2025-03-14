@@ -16,7 +16,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
         }
     }, [session?.user?.role, status, router]);
 
-    if (status === "loading") {
+    if (status === "loading" || status==="unauthenticated") {
         return <p>Loading...</p>; // Or replace with a spinner component
     }
 
