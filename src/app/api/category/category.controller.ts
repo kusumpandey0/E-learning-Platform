@@ -1,10 +1,15 @@
 import dbConnect from "@/database/connection";
 import Category from "@/models/category.schema";
 import { NextRequest, NextResponse } from "next/server";
+import authMiddleware from "../../../../middleware/auth.middleware";
 
 export async function createCategory(req:NextRequest){
    try{
      await dbConnect();
+     const response=await authMiddleware(req as NextRequest);
+        if(response.status===401){
+   return response;
+        }
     const {name,description}=await req.json();
     //already existing category or not
     const existingCategory=await Category.findOne({name:name})
@@ -35,6 +40,7 @@ export async function getCategories(){
     try
     {
         await dbConnect();
+        
     const data=await Category.find();
     if(data.length===0)
     {
@@ -55,9 +61,13 @@ export async function getCategories(){
     }
 }
 
-export async function deleteCategory(id:string){
+export async function deleteCategory(req:NextRequest ,id:string){
     try{
         await dbConnect();
+        const response=await authMiddleware(req as NextRequest);
+        if(response.status===401){
+   return response;
+        }
         const deleted=await Category.findByIdAndDelete(id);
         if(!deleted){
             return NextResponse.json({

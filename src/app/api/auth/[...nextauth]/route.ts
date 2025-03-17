@@ -50,7 +50,6 @@ export const authOptions:AuthOptions={
            (session.user as any).id=token.id;
             (session.user as any).role=token.role;
          }
-         console.log("SESSION",session);
           return session; 
         }
     }
