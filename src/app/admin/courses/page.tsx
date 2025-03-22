@@ -2,7 +2,7 @@
 import { deleteCategory, fetchCategories } from "@/store/category/categorySlice";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { useCallback, useEffect, useState } from "react";
-import Modal from "../components/Modal/Modal";
+import Modal from "./components/Modal";
 
 export default function courses(){
     const [searchTerm,setSearchTerm]=useState<string>("")
